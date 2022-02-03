@@ -5,5 +5,9 @@
   "main": "index.js",
   "repository": "git@github.com:JoshuaAlzate/NodeArchitectureGraphQL.git",
   "author": "Joshua Alzate",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.14",
+    "typescript": "^4.5.5"
+  }
 }
