@@ -1,16 +1,10 @@
 import 'dotenv/config';
 import { MikroORM } from "@mikro-orm/core";
-import { __dbName__, __prod__, __dbpassword__ } from "./constant";
-import entities from "./entities";
+import mikroOrmConfig from './mikro-orm.config';
+
 
 const main = async () => {
-    const orm = await MikroORM.init({
-        entities: entities,
-        dbName: __dbName__,
-        type: 'postgresql',
-        password: __dbpassword__,
-        debug: !__prod__
-    });
+    const orm = await MikroORM.init(mikroOrmConfig);
 }
 
 main().catch(error => {
