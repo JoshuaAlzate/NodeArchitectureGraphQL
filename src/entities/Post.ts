@@ -6,7 +6,7 @@ export class Post {
   @PrimaryKey()
   id!: number;
 
-  @Property()
+  @Property({ type: 'text' })
   title!: string;
 
 }
