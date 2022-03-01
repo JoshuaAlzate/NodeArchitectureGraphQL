@@ -27,4 +27,10 @@ export class PostResolver {
         await em.persistAndFlush(post);
         return post;
     }
+
+    @Mutation(() => Boolean)
+    async deletePost(@Arg('id') id: number, @Ctx() { em }: any): Promise<boolean> {
+        await em.nativeDelete(Post, { id });
+        return true;
+    }
 }
