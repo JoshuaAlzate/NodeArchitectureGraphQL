@@ -4,14 +4,6 @@ import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver } from "type
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 
 
-@InputType()
-class LoginCredentials {
-    @Field()
-    username: string;
-    @Field()
-    password: string;
-}
-
 @Resolver()
 export class UserResolver {
     @Mutation(() => User)
