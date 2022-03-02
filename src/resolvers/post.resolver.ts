@@ -1,5 +1,6 @@
 import { Post } from "../entities/Post";
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 
 @Resolver()
 export class PostResolver {
@@ -29,7 +30,7 @@ export class PostResolver {
     }
 
     @Mutation(() => Boolean)
-    async deletePost(@Arg('id') id: number, @Ctx() { em }: any): Promise<boolean> {
+    async deletePost(@Arg('id') id: number, @Ctx() { em }: MikroORM<IDatabaseDriver<Connection>>): Promise<boolean> {
         await em.nativeDelete(Post, { id });
         return true;
     }
