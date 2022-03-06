@@ -1,15 +1,15 @@
 import argon2 from "argon2";
 import { User } from "../entities/User";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { LoginCredentials } from "../types/login-credentials";
 import { UserResponse } from "../types/user-response";
+import { LocalContext } from "src/types/LocalContext";
 
 
 @Resolver()
 export class UserResolver {
     @Mutation(() => UserResponse)
-    async register(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: MikroORM<IDatabaseDriver<Connection>>): Promise<UserResponse> {
+    async register(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: LocalContext): Promise<UserResponse> {
         let { username, password } = credentials;
         if(!username.length) return { errors: [{ field: 'username', message: 'Username field cannot be empty' }]}
         if(!password.length) return { errors: [{ field: 'password', message: 'password field cannot be empty' }]}
@@ -25,7 +25,7 @@ export class UserResolver {
     }
 
     @Query(() => UserResponse)
-    async login(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: MikroORM<IDatabaseDriver<Connection>>): Promise<UserResponse> {
+    async login(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: LocalContext): Promise<UserResponse> {
         const user = await em.findOne(User, { username: credentials.username });
         if(!user) return {
             errors: [ { message: 'User does not exist', field: 'username'} ]

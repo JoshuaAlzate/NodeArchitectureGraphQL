@@ -1,6 +1,6 @@
 import { Post } from "../entities/Post";
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
+import { LocalContext } from "src/types/LocalContext";
 
 @Resolver()
 export class PostResolver {
@@ -14,14 +14,14 @@ export class PostResolver {
     }
 
     @Mutation(() => Post)
-    async createPost(@Arg('id') id: number, @Arg('title') title: string, @Ctx() { em }: any): Promise<Post> {
+    async createPost(@Arg('id') id: number, @Arg('title') title: string, @Ctx() { em }: LocalContext): Promise<Post> {
         const post = em.create(Post, { id, title });
         await em.persistAndFlush(post);
         return post;
     }
 
     @Mutation(() => Post)
-    async updatePost(@Arg('id') id: number, @Arg('title', { nullable: true }) title: string, @Ctx() { em }: any): Promise<Post | null> {
+    async updatePost(@Arg('id') id: number, @Arg('title', { nullable: true }) title: string, @Ctx() { em }: LocalContext): Promise<Post | null> {
         const post = await em.findOne(Post, { id });
         if(!post) return null;
         post.title = title;
@@ -30,7 +30,7 @@ export class PostResolver {
     }
 
     @Mutation(() => Boolean)
-    async deletePost(@Arg('id') id: number, @Ctx() { em }: MikroORM<IDatabaseDriver<Connection>>): Promise<boolean> {
+    async deletePost(@Arg('id') id: number, @Ctx() { em }: LocalContext): Promise<boolean> {
         await em.nativeDelete(Post, { id });
         return true;
     }
