@@ -25,7 +25,7 @@ export class UserResolver {
     }
 
     @Query(() => UserResponse)
-    async login(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: LocalContext): Promise<UserResponse> {
+    async login(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em, req }: LocalContext): Promise<UserResponse> {
         const user = await em.findOne(User, { username: credentials.username });
         if(!user) return {
             errors: [ { message: 'User does not exist', field: 'username'} ]
@@ -34,6 +34,8 @@ export class UserResolver {
         if(!isPasswordValid) return {
             errors: [{ message: 'Password is invalid', field: 'password' }]
         }
+        const session: any = req.session;
+        session.userID = user.id;
         return { user }
     }
 }
