@@ -3,7 +3,7 @@ import { User } from "../entities/User";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { LoginCredentials } from "../types/login-credentials";
 import { UserResponse } from "../types/user-response";
-import { LocalContext } from "src/types/LocalContext";
+import { LocalContext } from "src/types/local-context";
 
 
 @Resolver()
