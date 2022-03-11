@@ -12,10 +12,19 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
 import { LocalContext } from './types/local-context';
+import cors from 'cors';
 
 const RedisStore = connectRedis(session);
 const redisClient = createClient({ legacyMode: true });
 redisClient.connect().catch(console.error);
+
+const whitelist = ['http://127.0.0.1:3000'];
+const corsOptions = {
+    origin: (origin: any, callback: any) => {
+        callback(null, whitelist.includes(origin) || new Error('Not allowed by CORS'));
+    },
+    credentials: true
+}
 
 
 const main = async () => {
@@ -23,6 +32,8 @@ const main = async () => {
     await orm.getMigrator().up();
 
     const app = express();
+
+    app.use(cors(corsOptions));
 
     app.use(
         session({
@@ -55,7 +66,7 @@ const main = async () => {
     });
 
     await apolloServer.start();
-    apolloServer.applyMiddleware({ app, path: '/' });
+    apolloServer.applyMiddleware({ app, path: '/', cors: false });
 
     if (!__prod__) {
         app.listen(__port__);
