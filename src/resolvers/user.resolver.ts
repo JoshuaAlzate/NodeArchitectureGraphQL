@@ -9,7 +9,7 @@ import { LocalContext } from "src/types/local-context";
 @Resolver()
 export class UserResolver {
     @Mutation(() => UserResponse)
-    async register(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em }: LocalContext): Promise<UserResponse> {
+    async register(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em, req }: LocalContext): Promise<UserResponse> {
         let { username, password } = credentials;
         if(!username.length) return { errors: [{ field: 'username', message: 'Username field cannot be empty' }]}
         if(!password.length) return { errors: [{ field: 'password', message: 'password field cannot be empty' }]}
