@@ -18,6 +18,7 @@ export class UserResolver {
         const loginCredentials = em.create(User, { username, password });
         try {
             await em.persistAndFlush(loginCredentials);
+            req.session.userID = loginCredentials.id;
         } catch (error) {
             if (error.code === '23505') return { errors: [ { field: 'username', message: 'Username is already taken' } ]}
         }
@@ -34,8 +35,7 @@ export class UserResolver {
         if(!isPasswordValid) return {
             errors: [{ message: 'Password is invalid', field: 'password' }]
         }
-        const session: any = req.session;
-        session.userID = user.id;
+        req.session.userID = user.id;
         return { user }
     }
 }
