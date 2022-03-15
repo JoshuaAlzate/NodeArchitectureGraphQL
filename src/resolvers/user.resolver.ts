@@ -4,6 +4,7 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { LoginCredentials } from "../types/login-credentials";
 import { UserResponse } from "../types/user-response";
 import { LocalContext } from "src/types/local-context";
+import { COOKIE_NAME } from "../constant";
 
 
 @Resolver()
@@ -37,5 +38,27 @@ export class UserResolver {
         }
         req.session.userID = user.id;
         return { user }
+    }
+
+    @Query(() => UserResponse)
+    async me(@Ctx() { em, req }: LocalContext): Promise<UserResponse> {
+        if (!req.session.userID) return { errors: [{ message: 'You are not logged in', field: 'none' }] }
+        const user: any = await em.findOne(User, { id: req.session.userID });
+        return { user };
+    }
+
+    @Mutation(() => (Boolean))
+    async logout(@Ctx() { em, req, res }: LocalContext): Promise<Boolean> {
+        return new Promise(resolve =>
+            req.session.destroy(err => {
+                if (err) {
+                    console.error(err);
+                    resolve(false);
+                    return;
+                }
+                res.clearCookie(COOKIE_NAME);
+                resolve(true);
+            })
+        );
     }
 }
