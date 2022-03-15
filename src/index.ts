@@ -18,10 +18,10 @@ const RedisStore = connectRedis(session);
 const redisClient = createClient({ legacyMode: true });
 redisClient.connect().catch(console.error);
 
-const whitelist = ['http://127.0.0.1:3000'];
+const whitelist = ['http://127.0.0.1:3000', 'http://localhost:3000'];
 const corsOptions = {
     origin: (origin: any, callback: any) => {
-        callback(null, whitelist.includes(origin) || new Error('Not allowed by CORS'));
+        callback(null, () => whitelist.includes(origin) ? origin : new Error('Not allowed by CORS'));
     },
     credentials: true
 }
