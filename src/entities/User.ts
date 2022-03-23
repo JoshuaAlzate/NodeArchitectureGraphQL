@@ -21,7 +21,7 @@ export class User {
   createdAt!: Date
 
   @Field(() => Date)
-  @Property({ type: Date, nullable: true })
+  @Property({ type: Date, nullable: true, onUpdate: () => new Date() })
   updatedAt: Date
 
 }

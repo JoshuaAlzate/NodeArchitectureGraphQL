@@ -17,8 +17,8 @@ export class Post {
   @Property({ type: Date, onCreate: () => new Date() })
   createdAt!: Date
 
-  @Field(() => Date)
-  @Property({ type: Date, nullable: true })
+  @Field(() => Date, { nullable: true })
+  @Property({ type: Date, nullable: true, onUpdate: () => new Date() })
   updatedAt: Date
 
 }
