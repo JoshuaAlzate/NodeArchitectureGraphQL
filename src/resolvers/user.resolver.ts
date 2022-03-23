@@ -41,7 +41,7 @@ export class UserResolver {
     }
 
     @Query(() => UserResponse)
-    async me(@Ctx() { em, req }: LocalContext): Promise<UserResponse> {
+    async me(@Ctx() { em, req }: LocalContext): Promise<UserResponse | null> {
         if (!req.session.userID) return { errors: [{ message: 'You are not logged in', field: 'none' }] }
         const user: any = await em.findOne(User, { id: req.session.userID });
         return { user };
