@@ -3,20 +3,22 @@ import { User } from "../entities/User";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { LoginCredentials } from "../types/login-credentials";
 import { UserResponse } from "../types/user-response";
-import { LocalContext } from "src/types/local-context";
+import { LocalContext } from "../types/local-context";
 import { COOKIE_NAME } from "../constant";
+import { UserInformation } from "../types/user-information";
 
 
 @Resolver()
 export class UserResolver {
     @Mutation(() => UserResponse)
-    async register(@Arg('credentials') credentials: LoginCredentials, @Ctx() { em, req }: LocalContext): Promise<UserResponse> {
-        let { username, password } = credentials;
+    async register(@Arg('credentials') credentials: UserInformation, @Ctx() { em, req }: LocalContext): Promise<UserResponse> {
+        let { username, email, password } = credentials;
         if (!username.length) return { errors: [{ field: 'username', message: 'Username field cannot be empty' }] }
+        if (!email.length) return { errors: [{ field: 'username', message: 'Email field cannot be empty' }] }
         if (!password.length) return { errors: [{ field: 'password', message: 'password field cannot be empty' }] }
         password = await argon2.hash(password);
 
-        const loginCredentials = em.create(User, { username, password });
+        const loginCredentials = em.create(User, { username, email, password });
         try {
             await em.persistAndFlush(loginCredentials);
             req.session.userID = loginCredentials.id;
