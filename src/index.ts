@@ -43,7 +43,7 @@ const main = async () => {
                 disableTouch: true
             }),
             cookie: {
-                maxAge: 9999999999,
+                maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
                 httpOnly: true,
                 secure: __prod__,
                 sameSite: 'lax',
