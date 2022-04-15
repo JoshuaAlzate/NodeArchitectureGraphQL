@@ -10,12 +10,12 @@ import { COOKIE_NAME, __port__, __prod__, __redisSecret__ } from './constant';
 import resolvers from './resolvers';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
-import { createClient } from 'redis';
+import Redis from 'ioredis';
 import { LocalContext } from './types/local-context';
 import cors from 'cors';
 
 const RedisStore = connectRedis(session);
-const redisClient = createClient({ legacyMode: true });
+const redisClient = Redis.createClient();
 redisClient.connect().catch(console.error);
 
 const whitelist = ['http://127.0.0.1:3000', 'http://localhost:3000'];
