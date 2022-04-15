@@ -6,3 +6,5 @@ export const __redisSecret__ = process.env.REDIS_SECRET || '';
 export const COOKIE_NAME = 'qid';
 export const __mailerUser__ = process.env.MAILER_USER;
 export const __mailerPassword__ = process.env.MAILER_PASSWORD;
+
+export const FORGET_PASSWORD_TOKEN = 'forget-password:'
