@@ -58,7 +58,7 @@ const main = async () => {
             resolvers,
             validate: false
         }),
-        context: ({ req, res }): LocalContext => ({ em: orm.em, req, res }),
+        context: ({ req, res }): LocalContext => ({ em: orm.em, req, res, redis: redisClient }),
         plugins: [
             ApolloServerPluginLandingPageGraphQLPlayground({}),
             ApolloServerPluginLandingPageDisabled()
